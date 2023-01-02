@@ -3,10 +3,26 @@ package aplication;
 import db.DB;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class Program {
     public static void main(String[] args) {
-        Connection connection = DB.getConnection();
-        DB.closeConnection();
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DB.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("select * from department");
+
+            while (resultSet.next()) {
+                System.out.println(resultSet.getInt("id") + ", " + resultSet.getString("Name"));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

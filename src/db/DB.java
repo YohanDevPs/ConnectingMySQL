@@ -12,11 +12,13 @@ public class DB {
     private static Connection connection = null;
 
     public static Connection getConnection() {
-        try {
-            var propertieFile = loadProperties();
-            connection = DriverManager.getConnection(propertieFile.getProperty("dburl"), propertieFile);
-        } catch (SQLException e) {
-            throw new DbException(e.getMessage());
+        if(connection == null){
+            try {
+                var properties = loadProperties();
+                connection = DriverManager.getConnection(properties.getProperty("dburl"), properties);
+            } catch (SQLException e) {
+                throw new DbException(e.getMessage());
+            }
         }
         return connection;
     }
@@ -25,8 +27,7 @@ public class DB {
         if(connection != null) {
             try {
                 connection.close();
-            }
-            catch (SQLException e) {
+            } catch (SQLException e) {
                 throw new DbException(e.getMessage());
             }
         }
@@ -36,8 +37,7 @@ public class DB {
         Properties properties = new Properties();
         try (FileInputStream basePropertieFile = new FileInputStream("db.properties")) {
              properties.load(basePropertieFile);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return properties;
