@@ -23,6 +23,10 @@ public class Program {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            DB.closeResultSet(resultSet);
+            DB.closeStatement(statement);
+            DB.closeConnection();
         }
     }
 }
