@@ -7,10 +7,35 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class BasicsQuerys {
-    public static void insertData() {
-        PreparedStatement statement = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
 
+    private static Connection connection = null;
+    private static PreparedStatement statement = null;
+    private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
+
+    public static void updateData() {
+        try {
+            connection = DB.getConnection();
+            statement = connection.prepareStatement("UPDATE seller " +
+                    "SET BaseSalary = BaseSalary + ? " +
+                    "WHERE " +
+                    "(DepartmentId = ?)");
+
+            statement.setDouble(1, 200.00);
+            statement.setInt(2, 2);
+
+            int rowsAffected = statement.executeUpdate();
+
+            System.out.println("Done! Rows affected: " + rowsAffected);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            DB.closeStatement(statement);
+            DB.closeConnection();
+        }
+    }
+
+    public static void insertData() {
         try {
             statement = DB.getConnection().prepareStatement(
                     "INSERT INTO seller " +
