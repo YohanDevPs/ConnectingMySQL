@@ -50,6 +50,7 @@ public class DB {
             }
         }
     }
+
     public static void closeResultSet(ResultSet result) {
         if (result != null) {
             try {
