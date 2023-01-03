@@ -1,6 +1,7 @@
 package Querys;
 
 import db.DB;
+import db.DbIntegrityException;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -29,6 +30,27 @@ public class BasicsQuerys {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DB.closeStatement(statement);
+            DB.closeConnection();
+        }
+    }
+
+    public static void deleteData() {
+        try {
+            connection = DB.getConnection();
+            statement = connection.prepareStatement("DELETE FROM department  " +
+                    "WHERE " +
+                    "Id = ?");
+
+            statement.setInt(1, 4);
+
+            int rowsAffected = statement.executeUpdate();
+
+            System.out.println("Done! Rows affected: " + rowsAffected);
+
+        } catch (SQLException e) {
+            throw new DbIntegrityException(e.getMessage());
         } finally {
             DB.closeStatement(statement);
             DB.closeConnection();
