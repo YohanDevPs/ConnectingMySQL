@@ -1,4 +1,4 @@
-package Querys;
+package querys;
 
 import db.DB;
 import db.DbException;
